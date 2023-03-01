@@ -21,7 +21,7 @@ app.listen(4000, () => {
 app.get('/', (req: Request, res: Response) => {
   pergunta.findMany({
     orderBy: [{
-      id_pergunta: 'desc'
+      id: 'desc'
     }]
   }).then((perguntas) => {
     res.render('index', {
@@ -53,7 +53,7 @@ app.get('/pergunta/:id', (req: Request, res: Response) => {
   let { id } = req.params
   pergunta.findFirst({
     where: {
-      id_pergunta: Number(id)
+      id: Number(id)
     }
   }).then((pergunta) => {
     pergunta != undefined ?  res.render('pergunta', {

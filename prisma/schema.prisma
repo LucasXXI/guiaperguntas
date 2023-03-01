@@ -11,9 +11,19 @@ datasource db {
 }
 
 model Pergunta {
-  id_pergunta        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title    String   @db.VarChar(255) 
-  description String   @db.LongText
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  title       String     @db.VarChar(255)
+  description String     @db.LongText
+  respostas   Resposta[]
+}
+
+model Resposta {
+  id         Int      @id @default(autoincrement())
+  answerBody String   @map("answer_body") @db.LongText
+  perguntaId Int      @map("pergunta_id")
+  pergunta   Pergunta @relation(fields: [perguntaId], references: [id])
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 }
