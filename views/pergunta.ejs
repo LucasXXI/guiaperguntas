@@ -5,12 +5,24 @@
     <h1><%= pergunta.title %></h1>
     <p><%= pergunta.description %></p>
     <hr>
-    <form>
+    <form method="POST" action="/responder">
       <h3>Responda</h3>
       <label>Resposta: </label>
-      <textarea placeholder="Digite sua resposta" class="form-control" name="answer_body"></textarea>
-      <br>
+      <textarea placeholder="Digite sua resposta" class="form-control" name="answer_body"></textarea><br>
+      <input type="hidden" name="perguntaId" value="<%= pergunta.id %>">
       <button type="submit" class="btn btn-primary">Responder</button>
     </form>
+    <hr>
+    <h3>Respostas:</h3>
+    <hr>
+    <% respostas.forEach(resposta => {%>
+      <br>
+      <div class="card">
+        <div class="card-body">
+          <p><%= resposta.answerBody %></p>
+        </div>
+      </div>  
+    <% }) %>
+    <br>
   </div>
 <%- include ('partials/footer.ejs');  %>

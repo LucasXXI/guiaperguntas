@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 const app = express();
 const prisma = new PrismaClient();
 const pergunta = prisma.pergunta;
+const resposta = prisma.resposta;
 
 app.set('view engine', 'ejs') //delimita o template engine de HTML
 app.use(express.static('public'));
@@ -56,9 +57,34 @@ app.get('/pergunta/:id', (req: Request, res: Response) => {
       id: Number(id)
     }
   }).then((pergunta) => {
-    pergunta != undefined ?  res.render('pergunta', {
-      pergunta: pergunta
-    }) : res.redirect("/")
+    if(pergunta != undefined){
+      resposta.findMany({
+        where: {
+          perguntaId: pergunta.id
+        }, orderBy: {
+          id: 'desc'
+        }
+      }).then((respostas) => {
+        res.render('pergunta', {
+          pergunta: pergunta,
+          respostas: respostas
+        })
+      })
+    }else{
+      res.redirect('/')
+    }
+  })
+})
+
+app.post('/responder', (req: Request, res: Response) =>{ 
+  let { answer_body, perguntaId  } = req.body;
+  resposta.create({
+    data: {
+      answerBody: answer_body,
+      perguntaId: Number(perguntaId)
+    }
+  }).then(() => {
+    res.redirect(`/pergunta/${perguntaId}`)
   })
 })
 
